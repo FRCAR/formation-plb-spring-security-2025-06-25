@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+<title>Salut d'une page Thymeleaf !</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+
+<body>
+	Utilisateur connecté :
+	<span sec:authentication="name">Jean-Michel</span> GrantedAuthorities :
+	<span sec:authentication="principal.authorities">[READ_INVOICE,
+		DELETE_USER]</span>
+	<div sec:authorize="hasRole('DELETE_USER')">Contenu affiché si
+		l'utilisateur a la GrantedAuthority DELETE_USER (une
+		GrantedAuthority).</div>
+	<div sec:authorize="hasAuthority('ROBERTO')">Contenu affiché si
+		l'utilisateur a la GrantedAuthority ROBERTO (une GrantedAuthority).</div>
+	<h1>Salut les gens</h1>
+	<div><a href="./logout">Pour se déconnecter, cliquer ici</a></div>
+</body>
+</html>
