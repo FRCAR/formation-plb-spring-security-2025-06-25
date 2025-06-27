@@ -16,8 +16,8 @@ import fr.maboite.correction.model.Voiture;
 public class ContactService {
 
 	@PreAuthorize("hasRole('USER')")
-	//équivaut à @Secured("ROLE_USER")
-	public void afficheChaineSecurisee() {
+	//@Secured("ROLE_USER")
+	public void afficheChaineSecurisee()  {
 		System.out.println("J'affiche une chaîne de caractères.");
 	}
 	

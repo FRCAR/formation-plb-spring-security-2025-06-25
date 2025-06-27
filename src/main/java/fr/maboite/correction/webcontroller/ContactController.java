@@ -25,21 +25,21 @@ public class ContactController {
 		return "vue-contact";
 	}
 
-	@GetMapping({ "/contact-pre-filter.html" })
-	public String showContactPreFilter() {
+	@GetMapping({ "/contact-pre-authorize.html" })
+	public String showContactPreAuthorize() {
 		this.contactService.afficheChaineSecurisee();
 		return "vue-contact";
 	}
 
-	@GetMapping({ "/contact-post-filter.html" })
-	public String showContactPostFilter() {
+	@GetMapping({ "/contact-post-authorize.html" })
+	public String showContactPostAuthorize() {
 		String chaineSecurisee = this.contactService.renvoieChaineSecurisee();
 		System.out.println("Je peux afficher la chaîne sécurisée : " + chaineSecurisee);
 		return "vue-contact";
 	}
 
-	@GetMapping({ "/contact-pre-authorize.html" })
-	public String showContactPreAuthorize() {
+	@GetMapping({ "/contact-pre-filter.html" })
+	public String showContactPreFilter() {
 		List<String> strings = new ArrayList<>();
 		strings.add("user");
 		strings.add("admin");
@@ -48,8 +48,8 @@ public class ContactController {
 		return "vue-contact";
 	}
 
-	@GetMapping({ "/contact-post-authorize.html" })
-	public ModelAndView showContactPostAuthorize() {
+	@GetMapping({ "/contact-post-filter.html" })
+	public ModelAndView showContactPostFilter() {
 		System.out.println("J'affiche des voitures :");
 		Set<Voiture> voitures = this.contactService.getVoitures();
 		voitures.forEach(System.out::println);
