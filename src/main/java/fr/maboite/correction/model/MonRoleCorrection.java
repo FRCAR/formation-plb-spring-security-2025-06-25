@@ -3,6 +3,8 @@ package fr.maboite.correction.model;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.springframework.security.core.GrantedAuthority;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +17,11 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "MON_ROLE")
-public class MonRoleCorrection  {
+public class MonRoleCorrection implements GrantedAuthority  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -58,17 +64,17 @@ public class MonRoleCorrection  {
 		return "MonRole [id=" + id + ", nom=" + nom + "]";
 	}
 
-//	@Override
-//	public String getAuthority() {
-//		return this.nom;
-//	}
-
 	public Set<MaPermissionCorrection> getPermissions() {
 		return permissions;
 	}
 
 	public void setPermissions(Set<MaPermissionCorrection> permissions) {
 		this.permissions = permissions;
+	}
+
+	@Override
+	public String getAuthority() {
+		return this.nom;
 	}
 
 }

@@ -1,7 +1,6 @@
 package fr.maboite.correction.model;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -71,7 +70,7 @@ public class MonUtilisateurCorrection implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return Collections.emptySet();
+		return this.roles;
 	}
 
 	@Override
