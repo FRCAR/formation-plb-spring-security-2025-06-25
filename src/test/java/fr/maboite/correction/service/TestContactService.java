@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
 
 @SpringBootTest
@@ -33,10 +32,5 @@ public class TestContactService {
 		contactService.afficheChaineSecurisee();
 	}
 	
-	@Test
-	@WithMultipleMockUsers(names = {"jean","paul"})
-	public void testBouclette() {
-		System.out.println(SecurityContextHolder.getContext().getAuthentication().getName());
-	}
 
 }

@@ -8,32 +8,27 @@ import org.springframework.security.test.context.support.WithSecurityContextFact
 
 import fr.maboite.correction.model.MonUtilisateurCorrection;
 
-public class MultipleUsersSecurityContextFactory
-		implements WithSecurityContextFactory<WithMultipleMockUsers> {
-
-	int compteur = 0;
+/**
+ * Code exécuté par l'annotation WithMultipleMockUsers 
+ * pour créer un contexte de sécurité avant chaque test.
+ */
+public class MonUtilisateurSecurityContextFactory
+		implements WithSecurityContextFactory<WithMonUtilisateurMockUser> {
 
 	@Override
-	public SecurityContext createSecurityContext(WithMultipleMockUsers multipleUsers) {
-		if(multipleUsers.names() == null) {
-			throw new IllegalArgumentException("Argument names ne peut être vide ou null");
-		}
-		int usersSize = multipleUsers.names().length;
-		if(usersSize == 0) {
-			throw new IllegalArgumentException("Argument names ne peut être vide ou null");
+	public SecurityContext createSecurityContext(WithMonUtilisateurMockUser withMonUtilisateurMockUser) {
+		if(withMonUtilisateurMockUser.name() == null) {
+			throw new IllegalArgumentException("Argument name ne peut être vide ou null");
 		}
 		
 		SecurityContext context = SecurityContextHolder.createEmptyContext();
 
 		MonUtilisateurCorrection principal = new MonUtilisateurCorrection();
-		if (compteur > usersSize) {
-			compteur = 0;
-		}
-		principal.setLogin(multipleUsers.names()[compteur]);
+	
+		principal.setLogin(withMonUtilisateurMockUser.name());
 		Authentication auth = UsernamePasswordAuthenticationToken.authenticated(principal, "password",
 				principal.getAuthorities());
 		context.setAuthentication(auth);
-		compteur++;
 		return context;
 	}
 }
