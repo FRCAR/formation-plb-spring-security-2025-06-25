@@ -9,6 +9,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -21,6 +22,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.password.StandardPasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
+import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
@@ -43,13 +46,17 @@ public class SecurityConfigurationCorrection {
 	public SecurityFilterChain securityFilterChainJwt(HttpSecurity http) throws Exception {
 		return http
 				.securityMatcher("/rest/**")
+				.csrf(w->w.disable())
 				.authorizeHttpRequests(auth -> auth
-						.anyRequest().authenticated())
+						.requestMatchers(HttpMethod.GET, "/rest/bookings").hasAuthority("SCOPE_READ_BOOKING")
+						.requestMatchers(HttpMethod.POST, "/rest/bookings").hasAuthority("SCOPE_CREATE_BOOKING")
+						.anyRequest().authenticated()
+						)
 				// Spring Security va travailler en mode stateless
 				.sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 				// Ajout des capacités de traitement JWT
 				.oauth2ResourceServer(oauth2 -> oauth2
-						.jwt(Customizer.withDefaults()))
+						.jwt(c -> c.jwtAuthenticationConverter(null)))
 				.build();
 	}
 
@@ -100,7 +107,7 @@ public class SecurityConfigurationCorrection {
 						// De même que les ressources dans les répertoires de static
 						.requestMatchers("image/**").permitAll()
 						.requestMatchers("/contact-*.html").permitAll()
-						.requestMatchers("/contact.html").hasAuthority("ROLE_ADMIN")
+						.requestMatchers("/contact.html").hasAuthority("CREATE_BOOKING")
 						// Toute autre requête ne peut être émise que par une personne
 						// authentifiée
 						.anyRequest().authenticated())
@@ -132,6 +139,16 @@ public class SecurityConfigurationCorrection {
 		encoders.put("sha256", new StandardPasswordEncoder());
 		encoders.put("noop", NoOpPasswordEncoder.getInstance());
 		return new DelegatingPasswordEncoder(idForEncode, encoders);
+	}
+	
+	@Bean
+	public JwtAuthenticationConverter jwtAuthenticationConverter() {
+	    JwtGrantedAuthoritiesConverter grantedAuthoritiesConverter = new JwtGrantedAuthoritiesConverter();
+	    grantedAuthoritiesConverter.setAuthoritiesClaimName("doxxalia-credentials");
+
+	    JwtAuthenticationConverter jwtAuthenticationConverter = new JwtAuthenticationConverter();
+	    jwtAuthenticationConverter.setJwtGrantedAuthoritiesConverter(grantedAuthoritiesConverter);
+	    return jwtAuthenticationConverter;
 	}
 
 }

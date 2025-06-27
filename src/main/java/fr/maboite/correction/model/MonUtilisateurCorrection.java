@@ -70,7 +70,11 @@ public class MonUtilisateurCorrection implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return this.roles;
+		Set<GrantedAuthority> authorities = new HashSet<GrantedAuthority>();
+		for(MonRoleCorrection role : this.roles) {
+			authorities.addAll(role.getPermissions());
+		}
+		return authorities;
 	}
 
 	@Override

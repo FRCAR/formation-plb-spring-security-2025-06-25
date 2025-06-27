@@ -17,11 +17,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "MON_ROLE")
-public class MonRoleCorrection implements GrantedAuthority  {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+public class MonRoleCorrection {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -70,11 +66,6 @@ public class MonRoleCorrection implements GrantedAuthority  {
 
 	public void setPermissions(Set<MaPermissionCorrection> permissions) {
 		this.permissions = permissions;
-	}
-
-	@Override
-	public String getAuthority() {
-		return this.nom;
 	}
 
 }
